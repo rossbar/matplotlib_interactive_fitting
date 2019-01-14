@@ -7,10 +7,10 @@ Largely derived from `matplotlib user interface examples
 """
 
 import matplotlib
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt4agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
+from matplotlib.figure import Figure
 from matplotlib.widgets import RectangleSelector
 
 from PySide import QtCore, QtGui
@@ -19,18 +19,20 @@ class QMPLWidget(QtGui.QWidget):
     """
     Qt4 Widget container for matplotlib artists & canvas.
     """
-    def __init__(self, parent=None, axes=(1, 1), fig_facecolor="none"):
+    def __init__(self, parent=None, axes=111, fig_facecolor="none"):
         """
         Create a new QMPLWidget.
         """
         # Parent constructor
         super(QMPLWidget, self).__init__(parent)
-        # TODO: switch from pyplot API to OO API
-        self.fig, self.axes = plt.subplots(*axes)
+
+        # Set up figure, axes, figure canvas, and navigation bar
+        self.fig = Figure()
+        self.axes = self.fig.add_subplot(axes)
         self.canvas = FigureCanvas(self.fig)
         self.mpl_toolbar = NavigationToolbar(self.canvas, self, coordinates=False)
 
-        # Set figure facecolor
+        # Get rid of ugly white/gray border around figure object in widget
         self.fig.patch.set_facecolor(fig_facecolor)
 
         # Setup and apply layout
@@ -43,3 +45,4 @@ class QMPLWidget(QtGui.QWidget):
         # TODO: is this necessary? Check for both standalone and embedded use
         # cases
         self.canvas.draw()
+        self.show()
