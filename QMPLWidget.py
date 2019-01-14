@@ -11,7 +11,6 @@ from matplotlib.backends.backend_qt4agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
-from matplotlib.widgets import RectangleSelector
 
 from PySide import QtCore, QtGui
 
