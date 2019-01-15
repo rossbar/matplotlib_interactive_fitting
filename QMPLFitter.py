@@ -107,3 +107,13 @@ class QMPLFitterWidget(QMPLWidget):
         self.axes.plot(*args, **kwargs)
         # Render
         self.canvas.draw()
+
+    def hist(self, *args, **kwargs):
+        # Create histogram first
+        h, be, _ = self.axes.hist(*args, **kwargs)
+        # Set fitter
+        # TODO: Assumes regular binning
+        bc = be[:-1] + np.diff(be)[0] / 2
+        self.fitter.set_data(bc, h)
+        # Render
+        self.canvas.draw()

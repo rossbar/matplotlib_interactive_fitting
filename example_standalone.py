@@ -12,6 +12,7 @@ def gaus(x, a, b, c):
     return a*np.exp( -(x - b)**2 / (2*c**2) )
 
 if __name__ == "__main__":
+    # ************** Plot example
     num_vals = 100
     # Parameter for function
     a = 100
@@ -25,9 +26,25 @@ if __name__ == "__main__":
 
     # Make the plot with interactive fitting
     fw = QMPLFitterWidget()
+    fw.setWindowTitle('Plot Example')
     fw.plot(x, y)
 
     # TODO: This should be done elsewhere
     # Initialize fitter
     fw.fitter.model = gaus
     fw.fitter.params = (a, b, c)
+
+    # ************** Hist example
+    num_vals = 10000
+    # Parameters for distribution
+    centroid = 10.0
+    sigma = 3.0
+    vals = np.random.normal(centroid, sigma, num_vals)
+
+    # Test the histogramming with some kwargs
+    fw = QMPLFitterWidget()
+    fw.setWindowTitle('Hist Example')
+    fw.hist(vals, bins=100, histtype="step", log=False);
+
+    # Set the fitter model
+    fw.fitter.model = gaus
