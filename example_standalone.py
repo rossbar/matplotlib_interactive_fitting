@@ -26,3 +26,8 @@ if __name__ == "__main__":
     # Make the plot with interactive fitting
     fw = QMPLFitterWidget()
     fw.plot(x, y)
+
+    # TODO: This should be done elsewhere
+    # Initialize fitter
+    fw.fitter.model = gaus
+    fw.fitter.params = (a, b, c)

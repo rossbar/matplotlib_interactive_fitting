@@ -54,8 +54,11 @@ class QMPLFitterWidget(QMPLWidget):
         # TODO: Implement
         x1, y1 = click_event.xdata, click_event.ydata
         x2, y2 = release_event.xdata, release_event.ydata
-        print "Click @ (%.2f, %.2f) | Release @ (%.2f, %.2f)" \
-              %(x1, y1, x2, y2)
+        # Set the data subregion of the fitter
+        self.fitter.xmin, self.fitter.xmax = x1, x2
+        # Fit data
+        self.fitter.fit()
+        # Turn fitting action back off
         self.deactivate_fitter()
 
     def activate_fitter(self):
@@ -83,7 +86,7 @@ class QMPLFitterWidget(QMPLWidget):
             x, y = args[:-1]
 
         # Set fitter properties
-        self.fitter.xdata, self.fitter.ydata = x, y
+        self.fitter.set_data(x, y)
         
         # Pass arguments along to axis method
         self.axes.plot(*args, **kwargs)
