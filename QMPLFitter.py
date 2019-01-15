@@ -1,3 +1,4 @@
+import numpy as np
 from QMPLWidget import QMPLWidget
 from matplotlib.widgets import RectangleSelector
 
@@ -64,3 +65,27 @@ class QMPLFitterWidget(QMPLWidget):
     def deactivate_fitter(self):
         self.fit_action.setChecked(False)
         self.selector.set_active(False)
+
+    # TODO: Explicit wrapper of axes.plot - figure out how to do this 
+    # implicitly (class decorator? Populate obj dict with axes.__dict__?)
+    def plot(self, *args, **kwargs):
+        # Input parsing
+        if len(args) == 1:
+            y = args[0]
+            x = np.arange(y)
+        elif len(args) == 2:
+            if(type(args[1]) == str):
+                y = args[0]
+                x = np.arange(y)
+            else:
+                x, y = args
+        elif len(args) == 3:
+            x, y = args[:-1]
+
+        # Set fitter properties
+        self.fitter.xdata, self.fitter.ydata = x, y
+        
+        # Pass arguments along to axis method
+        self.axes.plot(*args, **kwargs)
+        # Render
+        self.canvas.draw()
