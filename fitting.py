@@ -32,4 +32,3 @@ class Fitter(object):
 
     def fit(self):
         self.popt, self.pcov = curve_fit(self.model, self.xf, self.yf, p0=self.params)
-        print self.popt

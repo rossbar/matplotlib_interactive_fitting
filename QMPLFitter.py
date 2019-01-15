@@ -28,6 +28,8 @@ class QMPLFitterWidget(QMPLWidget):
 
         # Add a "fitter" object to the widget
         self.fitter = Fitter()
+        # Artists to go along with fitter
+        self.fit_line = None
 
         # Modify navigation toolbar to include a fitting action/icon
         self.expand_toolbar()
@@ -58,6 +60,7 @@ class QMPLFitterWidget(QMPLWidget):
         self.fitter.xmin, self.fitter.xmax = x1, x2
         # Fit data
         self.fitter.fit()
+        self.show_fit()
         # Turn fitting action back off
         self.deactivate_fitter()
 
@@ -68,6 +71,18 @@ class QMPLFitterWidget(QMPLWidget):
     def deactivate_fitter(self):
         self.fit_action.setChecked(False)
         self.selector.set_active(False)
+
+    def show_fit(self):
+        """
+        Draw the model with the optimized params on the axis.
+        """
+        # Generate x-values in ROI at 2x density of actual data
+        x = np.linspace(self.fitter.xmin, self.fitter.xmax,
+                        2 * self.fitter.xf.shape[0])
+        y = self.fitter.model(x, *self.fitter.popt)
+        # TODO: How to choose/set the color/texture of fitted model
+        self.fit_line = self.axes.plot(x, y, "m-")[0]
+        self.canvas.draw()
 
     # TODO: Explicit wrapper of axes.plot - figure out how to do this 
     # implicitly (class decorator? Populate obj dict with axes.__dict__?)
