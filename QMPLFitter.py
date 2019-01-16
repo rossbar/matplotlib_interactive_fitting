@@ -48,11 +48,19 @@ class QMPLFitterWidget(QMPLWidget):
         """
         # Add a separator to the end of the toolbar
         self.mpl_toolbar.addSeparator()
+        
+        # Add interactive fit action
         fit_icon = QtGui.QIcon("/".join((RESOURCE_PATH, "gaus.svg")))
         self.fit_action = self.mpl_toolbar.addAction(fit_icon,
                                                      "Interactive fitting",
                                                      self.activate_fitter)
         self.fit_action.setCheckable(True)
+
+        # Add fit-clearing action
+        clearfit_icon = QtGui.QIcon("/".join((RESOURCE_PATH, "clear.svg")))
+        self.clearfit_action = self.mpl_toolbar.addAction(clearfit_icon,
+                                                          "Clear current fit",
+                                                          self.clear_fit)
 
     def rect_select_callback(self, click_event, release_event):
         """
@@ -87,6 +95,15 @@ class QMPLFitterWidget(QMPLWidget):
         y = self.fitter.model(x, *self.fitter.popt)
         # TODO: How to choose/set the color/texture of fitted model
         self.fit_line = self.axes.plot(x, y, "m-")[0]
+        self.canvas.draw()
+
+    def clear_fit(self):
+        """
+        Remove artists associated with interactive fitting from the canvas.
+        """
+        if self.fit_line is not None:
+            self.axes.lines.remove(self.fit_line)
+            self.fit_line = None
         self.canvas.draw()
 
     # TODO: Explicit wrapper of axes.plot - figure out how to do this 
