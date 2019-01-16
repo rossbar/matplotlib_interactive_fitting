@@ -30,6 +30,10 @@ class QMPLWidget(QtGui.QWidget):
         self.axes = self.fig.add_subplot(axes)
         self.canvas = FigureCanvas(self.fig)
         self.mpl_toolbar = NavigationToolbar(self.canvas, self, coordinates=False)
+        # Add a label for current mouse position
+        self.loc_label = QtGui.QLabel("POSITION INFO HERE", self.canvas)
+        self.loc_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
+        self.loc_label.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
 
         # Get rid of ugly white/gray border around figure object in widget
         self.fig.patch.set_facecolor(fig_facecolor)
@@ -38,6 +42,7 @@ class QMPLWidget(QtGui.QWidget):
         self.layout = QtGui.QVBoxLayout(self)
         self.layout.addWidget(self.mpl_toolbar)
         self.layout.addWidget(self.canvas)
+        self.layout.addWidget(self.loc_label)
         self.setLayout(self.layout)
 
         # Initial render
