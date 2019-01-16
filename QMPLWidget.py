@@ -31,7 +31,7 @@ class QMPLWidget(QtGui.QWidget):
         self.canvas = FigureCanvas(self.fig)
         self.mpl_toolbar = NavigationToolbar(self.canvas, self, coordinates=False)
         # Add a label for current mouse position
-        self.loc_label = QtGui.QLabel("POSITION INFO HERE", self.canvas)
+        self.loc_label = QtGui.QLabel("", self.canvas)
         self.loc_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
         self.loc_label.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
 
@@ -45,8 +45,22 @@ class QMPLWidget(QtGui.QWidget):
         self.layout.addWidget(self.loc_label)
         self.setLayout(self.layout)
 
+        # Link up events to callbacks
+        self.canvas.mpl_connect('motion_notify_event', self.mouse_motion_callback)
+
         # Initial render
         # TODO: is this necessary? Check for both standalone and embedded use
         # cases
         self.canvas.draw()
         self.show()
+
+    def mouse_motion_callback(self, mouse_event):
+        """
+        Callback for mouse motion over canvas.
+
+        Report the current x, y position of cursor in data coordinates.
+        """
+        if mouse_event.inaxes:
+            x, y = mouse_event.xdata, mouse_event.ydata
+            self.loc_label.setText("x = %.3f\ty = %.3f" %(x, y))
+        else: self.loc_label.setText("")
