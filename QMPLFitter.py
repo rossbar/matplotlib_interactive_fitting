@@ -6,6 +6,11 @@ from PySide import QtGui
 
 from fitting import Fitter
 
+# Make the package importable from anywhere on the system (fix broken links
+# to QIcon .svg)
+import os
+RESOURCE_PATH = os.path.join(os.path.dirname(__file__), "resources")
+
 class QMPLFitterWidget(QMPLWidget):
     """
     Qt4 Widget with matplotlib elements modified to include interactive
@@ -43,7 +48,7 @@ class QMPLFitterWidget(QMPLWidget):
         """
         # Add a separator to the end of the toolbar
         self.mpl_toolbar.addSeparator()
-        fit_icon = QtGui.QIcon("resources/gaus.svg")
+        fit_icon = QtGui.QIcon("/".join((RESOURCE_PATH, "gaus.svg")))
         self.fit_action = self.mpl_toolbar.addAction(fit_icon,
                                                      "Interactive fitting",
                                                      self.activate_fitter)
