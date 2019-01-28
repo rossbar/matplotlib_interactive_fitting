@@ -27,6 +27,11 @@ class Fitter(object):
     def yf(self):
         return self.ydata[self.data_mask]
 
+    @property
+    def perr(self):
+        if self.popt is None or self.pcov is None: return None
+        return np.sqrt(np.diag(self.pcov))
+
     def set_data(self, x, y):
         self.xdata, self.ydata = x, y
 

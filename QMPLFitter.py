@@ -94,9 +94,10 @@ class QMPLFitterWidget(QMPLWidget):
         """
         # Return None if no optimized params to summarize
         if self.fitter.popt is None: return
-        hdr = "Optimal Parameters:\n"
+        hdr = "Optimal Parameters $(\pm 1\sigma)$:\n"
         # Summarize fit results
-        summary = "\n".join(["  p[%s] = %.3f" %(p, val) for p, val in enumerate(self.fitter.popt)])
+        summary = "\n".join(["  p[%s] = %.3f $\pm$ %.3f" %(p, val, err) for \
+                             p, (val, err) in enumerate(zip(self.fitter.popt, self.fitter.perr))])
         return hdr + summary
 
     def show_fit(self):
