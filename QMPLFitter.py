@@ -168,3 +168,4 @@ class QMPLFitterWidget(QMPLWidget):
         self.fitter.set_data(bc, h)
         # Render
         self.canvas.draw()
+
