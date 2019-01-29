@@ -4,12 +4,7 @@ Example script for testing interactive fitting as a standalone widget.
 
 import numpy as np
 from QMPLFitter import QMPLFitterWidget
-
-def gaus(x, a, b, c):
-    """
-    3-parameter Gaussian function.
-    """
-    return a*np.exp( -(x - b)**2 / (2*c**2) )
+from fitting import gaus
 
 if __name__ == "__main__":
     # ************** Plot example

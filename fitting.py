@@ -1,6 +1,12 @@
 import numpy as np
 from scipy.optimize import curve_fit
 
+def gaus(x, a, b, c):
+    """
+    3-parameter Gaussian function.
+    """
+    return a*np.exp( -(x - b)**2 / (2*c**2) )
+
 class Fitter(object):
     def __init__(self, xdata=None, ydata=None, model=None, params=None,
                  estimator=None):
@@ -22,7 +28,7 @@ class Fitter(object):
     @property
     def xf(self):
         return self.xdata[self.data_mask]
-    
+
     @property
     def yf(self):
         return self.ydata[self.data_mask]
