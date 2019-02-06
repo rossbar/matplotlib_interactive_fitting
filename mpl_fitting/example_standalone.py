@@ -32,11 +32,6 @@ if __name__ == "__main__":
     fw.setWindowTitle('Plot Example')
     fw.plot(x, y)
 
-    # TODO: This should be done elsewhere
-    # Initialize fitter
-    fw.fitter.model = gaus
-    fw.fitter.params = (a, b, c)
-
     # ************** Hist example
     num_vals = 10000
     # Parameters for distribution
@@ -48,9 +43,6 @@ if __name__ == "__main__":
     fw = QMPLFitterWidget()
     fw.setWindowTitle('Hist Example')
     fw.hist(vals, bins=100, histtype="step", log=False);
-
-    # Set the fitter model
-    fw.fitter.model = gaus
 
     # Call application run loop
     app.exec_()
