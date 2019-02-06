@@ -3,13 +3,16 @@ Example script for testing interactive fitting as a standalone widget.
 """
 
 import numpy as np
+from PySide import QtGui
 from QMPLFitter import QMPLFitterWidget
+from fitting import gaus
 
-def gaus(x, a, b, c):
-    """
-    3-parameter Gaussian function.
-    """
-    return a*np.exp( -(x - b)**2 / (2*c**2) )
+# Must have a QApplication instance before QWidget can be created.
+# Without this blurb, it is not possible to run as a script
+# (e.g. python example_standalone.py)
+app = QtGui.QApplication.instance()
+if not app:
+    app = QtGui.QApplication([])
 
 if __name__ == "__main__":
     # ************** Plot example
@@ -48,3 +51,6 @@ if __name__ == "__main__":
 
     # Set the fitter model
     fw.fitter.model = gaus
+
+    # Call application run loop
+    app.exec_()

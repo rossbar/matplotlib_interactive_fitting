@@ -35,6 +35,7 @@ class QMPLFitterWidget(QMPLWidget):
         self.fitter = Fitter()
         # Artists to go along with fitter
         self.fit_line = None
+        self.fit_textbox = None
 
         # Modify navigation toolbar to include a fitting action/icon
         self.expand_toolbar()
@@ -85,6 +86,20 @@ class QMPLFitterWidget(QMPLWidget):
         self.fit_action.setChecked(False)
         self.selector.set_active(False)
 
+    # TODO: The functionality in this method should be moved to the Fitter
+    # class. See branch feat/fitter_textbox for aborted attempt
+    def generate_text_summary(self):
+        """
+        Summarize the results presenting the optimal parameters in text
+        """
+        # Return None if no optimized params to summarize
+        if self.fitter.popt is None: return
+        hdr = "Optimal Parameters $(\pm 1\sigma)$:\n"
+        # Summarize fit results
+        summary = "\n".join(["  p[%s] = %.3f $\pm$ %.3f" %(p, val, err) for \
+                             p, (val, err) in enumerate(zip(self.fitter.popt, self.fitter.perr))])
+        return hdr + summary
+
     def show_fit(self):
         """
         Draw the model with the optimized params on the axis.
@@ -95,6 +110,17 @@ class QMPLFitterWidget(QMPLWidget):
         y = self.fitter.model(x, *self.fitter.popt)
         # TODO: How to choose/set the color/texture of fitted model
         self.fit_line = self.axes.plot(x, y, "m-")[0]
+        # Add a textbox summarizing the fit
+        # TODO: Customize where/how summary of text shows up. Currently, have
+        # textbox pop up in upper-left corner
+        self.fit_textbox = self.axes.text(0.0, 1.0,   # Axes coordinates
+                                          self.generate_text_summary(),
+                                          horizontalalignment="left",
+                                          verticalalignment="top",
+                                          transform=self.axes.transAxes,
+                                          bbox={"facecolor" : "yellow",
+                                                "alpha"     : 0.5,
+                                                "pad"       : 0})
         self.canvas.draw()
 
     def clear_fit(self):
@@ -104,6 +130,9 @@ class QMPLFitterWidget(QMPLWidget):
         if self.fit_line is not None:
             self.axes.lines.remove(self.fit_line)
             self.fit_line = None
+        if self.fit_textbox is not None:
+            self.fit_textbox.remove()
+            self.fit_textbox = None
         self.canvas.draw()
 
     # TODO: Explicit wrapper of axes.plot - figure out how to do this 
@@ -139,3 +168,4 @@ class QMPLFitterWidget(QMPLWidget):
         self.fitter.set_data(bc, h)
         # Render
         self.canvas.draw()
+
