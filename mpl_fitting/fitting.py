@@ -7,6 +7,18 @@ def gaus(x, a, b, c):
     """
     return a*np.exp( -(x - b)**2 / (2*c**2) )
 
+def lin(x, m, b):
+    """
+    Linear function, m = slope, b = intercept.
+    """
+    return m*x + b
+
+def gaus_pol1(x, a, b, c, m, yint):
+    """
+    Gaussian function on top of linear background.
+    """
+    return gaus(x, a, b, c) + lin(x, m, yint)
+
 class Fitter(object):
     def __init__(self, xdata=None, ydata=None, model=None, params=None,
                  estimator=None):
