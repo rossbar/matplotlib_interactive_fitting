@@ -83,4 +83,4 @@ class Fitter(object):
         else: param_estimates = None
         self.popt, self.pcov = curve_fit(self.model, self.xf, self.yf, 
                                          p0=param_estimates)
-        self.fit_history.append({"popt" : popt, "pcov" : pcov})
+        self.fit_history.append({"popt" : self.popt, "pcov" : self.pcov})
