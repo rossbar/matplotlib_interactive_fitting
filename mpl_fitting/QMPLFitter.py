@@ -163,8 +163,8 @@ class QMPLFitterWidget(QMPLWidget):
         # Create histogram first
         h, be, _ = self.axes.hist(*args, **kwargs)
         # Set fitter
-        # TODO: Assumes regular binning
-        bc = be[:-1] + np.diff(be)[0] / 2
+        # TODO: Only linear interp of binning here!
+        bc = be[:-1] + (be[1:]- be[:-1]) / 2.0
         self.fitter.set_data(bc, h)
         # Render
         self.canvas.draw()
