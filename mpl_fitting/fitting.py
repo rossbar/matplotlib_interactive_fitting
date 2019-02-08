@@ -40,14 +40,13 @@ def gaus_pol1_param_estimator(x, y):
     return (a, b, c, m, yint)
 
 class Fitter(object):
-    def __init__(self, xdata=None, ydata=None, model=gaus_pol1, params=None,
+    def __init__(self, xdata=None, ydata=None, model=gaus_pol1,
                  estimator=gaus_pol1_param_estimator):
         # Inputs
         self.xdata = xdata
         self.ydata = ydata
         self.xmin, self.xmax = None, None
         self.model = model
-        self.params = params
         self.estimator = estimator
         # Outputs
         self.popt = None
@@ -78,7 +77,8 @@ class Fitter(object):
         Find optimal parameter estimates using scipy.curve_fit
         """
         # Initialize parameter estimates
-        if self.params is None:
-            self.params = self.estimator(self.xf, self.yf)
+        if self.estimator is not None:
+            param_estimates = self.estimator(self.xf, self.yf)
+        else: param_estimates = None
         self.popt, self.pcov = curve_fit(self.model, self.xf, self.yf, 
-                                         p0=self.params)
+                                         p0=param_estimates)

@@ -45,4 +45,4 @@ if __name__ == "__main__":
     fw.hist(vals, bins=100, histtype="step", log=False);
 
     # Call application run loop
-    app.exec_()
+#    app.exec_()
