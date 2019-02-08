@@ -51,6 +51,7 @@ class Fitter(object):
         # Outputs
         self.popt = None
         self.pcov = None
+        self.fit_history = []
 
     @property
     def data_mask(self):
@@ -82,3 +83,4 @@ class Fitter(object):
         else: param_estimates = None
         self.popt, self.pcov = curve_fit(self.model, self.xf, self.yf, 
                                          p0=param_estimates)
+        self.fit_history.append({"popt" : popt, "pcov" : pcov})
