@@ -138,24 +138,14 @@ class QMPLFitterWidget(QMPLWidget):
     # TODO: Explicit wrapper of axes.plot - figure out how to do this 
     # implicitly (class decorator? Populate obj dict with axes.__dict__?)
     def plot(self, *args, **kwargs):
-        # Input parsing
-        if len(args) == 1:
-            y = args[0]
-            x = np.arange(y)
-        elif len(args) == 2:
-            if(type(args[1]) == str):
-                y = args[0]
-                x = np.arange(y)
-            else:
-                x, y = args
-        elif len(args) == 3:
-            x, y = args[:-1]
-
-        # Set fitter properties
-        self.fitter.set_data(x, y)
-        
+        """
+        Wrapper around Axes.plot method that sets the fitter data to the 
+        x, y values of the plotted line.
+        """
         # Pass arguments along to axis method
-        self.axes.plot(*args, **kwargs)
+        line, = self.axes.plot(*args, **kwargs)
+        # Set fitter properties
+        self.fitter.set_data(*(line.get_data()))
         # Render
         self.canvas.draw()
 
